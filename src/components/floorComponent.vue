@@ -46,6 +46,9 @@ export default {
 </script>
 
 <style scoped>
+img {
+  display: block;
+}
 .floor-title {
   text-align: center;
   font-size: 14px;
