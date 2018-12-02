@@ -47,36 +47,18 @@
         </swiper>
       </div>
     </div>
-    <!-- floor -->
-    <div class="floor">
-      <div class="floor-anomaly">
-        <div class="floor-one">
-          <img :src="floor1_0.image" width="100%" alt>
-        </div>
-        <div>
-          <div class="floor-two">
-            <img :src="floor1_1.image" width="100%" alt>
-          </div>
-          <div>
-            <img :src="floor1_2.image" width="100%" alt>
-          </div>
-        </div>
-      </div>
-      <div class="floor-rule">
-        <div v-for="(item, index) in floor1.slice(3)" :key="index">
-          <img :src="item.image" width="100%" alt>
-        </div>
-      </div>
-    </div>
+    <floor-component :floorData="floor1" :floorTitle="floorName.floor1"></floor-component>
+    <floor-component :floorData="floor2" :floorTitle="floorName.floor2"></floor-component>
+    <floor-component :floorData="floor3" :floorTitle="floorName.floor3"></floor-component>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
+import floorComponent from "../components/floorComponent";
 export default {
   name: "index",
-  components: {},
+  components: { floorComponent },
   data() {
     return {
       swiperOption: {
@@ -88,9 +70,9 @@ export default {
       adBanner: "",
       recommendGoods: [],
       floor1: [],
-      floor1_0: {},
-      floor1_1: {},
-      floor1_2: {}
+      floor2: [],
+      floor3: [],
+      floorName: {}
     };
   },
   created() {
@@ -105,9 +87,9 @@ export default {
       this.bannerPicArray = data.slides;
       this.recommendGoods = data.recommend;
       this.floor1 = data.floor1;
-      this.floor1_0 = this.floor1[0];
-      this.floor1_1 = this.floor1[1];
-      this.floor1_2 = this.floor1[2];
+      this.floor2 = data.floor2;
+      this.floor3 = data.floor3;
+      this.floorName = data.floorName;
     });
   }
 };
@@ -174,37 +156,5 @@ export default {
   border-right: 1px solid #eeeeee;
   font-size: 12px;
   text-align: center;
-}
-.floor-anomaly {
-  display: flex;
-  flex-direction: row;
-  background-color: #ffffff;
-  border-bottom: 1px solid #dddddd;
-}
-.floor-anomaly div {
-  width: 10rem;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-.floor-one {
-  border-right: 1px solid #dddddd;
-}
-.floor-two {
-  border-bottom: 1px solid #dddddd;
-}
-.floor-rule {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  background-color: #ffffff;
-}
-.floor-rule div {
-  width: 10rem;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  border-bottom: 1px solid #dddddd;
-}
-.floor-rule div:nth-child(odd) {
-  border-right: 1px solid #dddddd;
 }
 </style>
