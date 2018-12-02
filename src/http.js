@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Notify, Toast } from "vant";
+import { BASEURL } from "./serviceAPI.config";
 
 //mac
 
@@ -18,7 +19,7 @@ function endLoading() {
 }
 
 const ajax = axios.create({
-  baseURL: "https://www.easy-mock.com/mock/5c03214b0694c411d85d8354",
+  baseURL: BASEURL,
   timeout: 4000
 });
 

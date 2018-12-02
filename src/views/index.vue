@@ -76,6 +76,7 @@
 import floorComponent from "../components/floorComponent";
 import goodsInfoComponent from "../components/goodsInfoComponent";
 import { toMoney } from "@/filter/moneyFilter.js";
+import { getIndexInfo } from "../serviceAPI.config.js";
 export default {
   name: "index",
   components: { floorComponent, goodsInfoComponent },
@@ -104,7 +105,7 @@ export default {
   created() {
     this.$axios({
       method: "get",
-      url: `/index`
+      url: getIndexInfo
     }).then(res => {
       console.log(res);
       let data = res.data.data;
