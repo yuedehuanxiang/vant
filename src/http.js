@@ -38,9 +38,7 @@ ajax.interceptors.request.use(
 ajax.interceptors.response.use(
   response => {
     // 结束加载动画
-    setTimeout(() => {
-      endLoading();
-    }, 1000);
+    endLoading();
     return response;
   },
   error => {

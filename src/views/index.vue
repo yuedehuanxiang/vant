@@ -3,13 +3,13 @@
     <div class="search-bar">
       <van-row>
         <van-col span="3">
-          <img :src="locationIcon" width="80%" height="90%" class="location-icon" alt>
+          <img :src="locationIcon" width="70%" height="70%" class="location-icon" alt>
         </van-col>
         <van-col span="16">
           <input type="text" class="search-input">
         </van-col>
         <van-col span="5">
-          <van-button size="mini">查找</van-button>
+          <van-button class="search-btn" size="mini">查找</van-button>
         </van-col>
       </van-row>
     </div>
@@ -35,7 +35,38 @@
     <!-- Recommend goods area -->
     <div class="recommend-area">
       <div class="recommend-title">商品推荐</div>
-      <div class="recommend-body"></div>
+      <div class="recommend-body">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(item, index) in recommendGoods" :key="index">
+            <div class="recommend-item">
+              <img :src="item.image" width="80%" alt>
+              <div>{{item.goodsName}}</div>
+              <div>¥{{item.price}}（¥{{item.mallPrice}}）</div>
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+    <!-- floor -->
+    <div class="floor">
+      <div class="floor-anomaly">
+        <div class="floor-one">
+          <img :src="floor1_0.image" width="100%" alt>
+        </div>
+        <div>
+          <div class="floor-two">
+            <img :src="floor1_1.image" width="100%" alt>
+          </div>
+          <div>
+            <img :src="floor1_2.image" width="100%" alt>
+          </div>
+        </div>
+      </div>
+      <div class="floor-rule">
+        <div v-for="(item, index) in floor1.slice(3)" :key="index">
+          <img :src="item.image" width="100%" alt>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,23 +79,18 @@ export default {
   components: {},
   data() {
     return {
+      swiperOption: {
+        slidesPerView: 3
+      },
       locationIcon: require("../assets/images/location.png"),
-      bannerPicArray: [
-        {
-          imageUrl:
-            "https://www.chenshuai2018.com/wp-content/uploads/2018/10/15404529511.png"
-        },
-        {
-          imageUrl:
-            "https://www.chenshuai2018.com/wp-content/uploads/2018/10/15404529511.png"
-        },
-        {
-          imageUrl:
-            "https://www.chenshuai2018.com/wp-content/uploads/2018/10/15404529511.png"
-        }
-      ],
+      bannerPicArray: [],
       category: [],
-      adBanner: ""
+      adBanner: "",
+      recommendGoods: [],
+      floor1: [],
+      floor1_0: {},
+      floor1_1: {},
+      floor1_2: {}
     };
   },
   created() {
@@ -73,9 +99,15 @@ export default {
       url: `/index`
     }).then(res => {
       console.log(res);
-      this.category = res.data.data.category;
-      this.adBanner = res.data.data.advertesPicture.PICTURE_ADDRESS;
-      this.bannerPicArray = res.data.data.slides;
+      let data = res.data.data;
+      this.category = data.category;
+      this.adBanner = data.advertesPicture.PICTURE_ADDRESS;
+      this.bannerPicArray = data.slides;
+      this.recommendGoods = data.recommend;
+      this.floor1 = data.floor1;
+      this.floor1_0 = this.floor1[0];
+      this.floor1_1 = this.floor1[1];
+      this.floor1_2 = this.floor1[2];
     });
   }
 };
@@ -87,6 +119,9 @@ export default {
   background-color: #e5017d;
   line-height: 2.2rem;
   overflow: hidden;
+}
+.search-btn {
+  margin-left: 16px;
 }
 .search-input {
   width: 100%;
@@ -130,5 +165,46 @@ export default {
   font-size: 14px;
   padding: 0.2rem;
   color: #e5017d;
+}
+.recommend-body {
+  border-bottom: 1px solid #eeeeee;
+}
+.recommend-item {
+  width: 99%;
+  border-right: 1px solid #eeeeee;
+  font-size: 12px;
+  text-align: center;
+}
+.floor-anomaly {
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+}
+.floor-anomaly div {
+  width: 10rem;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.floor-one {
+  border-right: 1px solid #dddddd;
+}
+.floor-two {
+  border-bottom: 1px solid #dddddd;
+}
+.floor-rule {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+}
+.floor-rule div {
+  width: 10rem;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-bottom: 1px solid #dddddd;
+}
+.floor-rule div:nth-child(odd) {
+  border-right: 1px solid #dddddd;
 }
 </style>
