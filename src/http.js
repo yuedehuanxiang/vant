@@ -46,7 +46,7 @@ ajax.interceptors.response.use(
     // 错误提醒
     endLoading();
     console.log(error.response);
-    Notify(error.response.data);
+    Notify("请求出错");
 
     return Promise.reject(error);
   }
