@@ -36,6 +36,12 @@ export default {
       passwordErrorMsg: "" // 当密码出错时的提示信息
     };
   },
+  created() {
+    if (localStorage.userInfo) {
+      this.$toast.success("您已经登陆过了");
+      this.$router.push("/");
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1);
@@ -57,10 +63,28 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
-          this.openLoading = false;
+          if (res.data.code == 200 && res.data.message == true) {
+            new Promise(resolve => {
+              localStorage.userInfo = { userName: this.username };
+              setTimeout(() => {
+                resolve();
+              }, 500);
+            })
+              .then(() => {
+                this.$toast.success("登陆成功");
+                this.$router.push("/");
+              })
+              .catch(err => {
+                this.$toast.fail("登陆状态存储失败");
+                console.log(err);
+              });
+          } else {
+            this.$toast.fail("登陆失败");
+            this.openLoading = false;
+          }
         })
         .catch(() => {
+          this.$toast.fail("登陆失败");
           this.openLoading = false;
         });
     },
