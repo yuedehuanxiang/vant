@@ -4,6 +4,7 @@ import Index from "./views/index.vue";
 import Register from "./views/Register.vue";
 import Login from "./views/Login.vue";
 import Goods from "./views/Goods.vue";
+import CategoryList from "./views/CategoryList.vue";
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: "/goods",
       name: "Goods",
       component: Goods
+    },
+    {
+      path: "/categoryList",
+      name: "CategoryList",
+      component: CategoryList
     }
     // {
     //   path: "/about",
