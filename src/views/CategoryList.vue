@@ -28,9 +28,11 @@
             </van-tabs>
           </div>
           <div id="list-div">
-            <van-list v-model="loading" :finished="finished" @load="onload">
-              <div class="list-item" v-for="item in list" :key="item">{{item}}</div>
-            </van-list>
+            <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+              <van-list v-model="loading" :finished="finished" @load="onload">
+                <div class="list-item" v-for="item in list" :key="item">{{item}}</div>
+              </van-list>
+            </van-pull-refresh>
           </div>
         </van-col>
       </van-row>
@@ -49,7 +51,8 @@ export default {
       active: 0, // 激活标签的值
       loading: false,
       finished: false, // 上拉加载是否有数据
-      list: [] // 商品数据
+      list: [], // 商品数据
+      isRefresh: false //下拉刷新
     };
   },
   created() {
@@ -61,6 +64,15 @@ export default {
     document.getElementById("list-div").style.height = winHeight - 90 + "px";
   },
   methods: {
+    // 下拉刷新方法
+    onRefresh() {
+      setTimeout(() => {
+        this.isRefresh = false;
+        this.finished = false;
+        this.list = [];
+        this.onload();
+      }, 500);
+    },
     // 上拉加载方法
     onload() {
       setTimeout(() => {
