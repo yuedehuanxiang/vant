@@ -19,7 +19,7 @@
         </van-col>
         <van-col span="18">
           <div class="tabCategorySub">
-            <van-tabs v-model="active">
+            <van-tabs v-model="active" @click="onClickCategorySub">
               <van-tab
                 v-for="(item, index) in categorySub"
                 :key="index"
@@ -30,7 +30,15 @@
           <div id="list-div">
             <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
               <van-list v-model="loading" :finished="finished" @load="onload">
-                <div class="list-item" v-for="item in list" :key="item">{{item}}</div>
+                <div class="list-item" v-for="(item,index) in goodList" :key="index">
+                  <div class="list-item-img">
+                    <img :src="item.IMAGE1" width="100%" alt>
+                  </div>
+                  <div class="list-item-text">
+                    <div>{{item.NAME}}</div>
+                    <div>{{item.ORI_PRICE}}</div>
+                  </div>
+                </div>
               </van-list>
             </van-pull-refresh>
           </div>
@@ -51,7 +59,9 @@ export default {
       active: 0, // 激活标签的值
       loading: false,
       finished: false, // 上拉加载是否有数据
-      list: [], // 商品数据
+      page: 1, // 商品列表的页数
+      goodList: [], // 商品列表信息
+      categorySubId: "", // 商品子类ID
       isRefresh: false //下拉刷新
     };
   },
@@ -64,29 +74,58 @@ export default {
     document.getElementById("list-div").style.height = winHeight - 90 + "px";
   },
   methods: {
+    onClickCategorySub(index) {
+      this.categorySubId = this.categorySub[index].ID;
+      console.log("categorySubId" + this.categorySubId);
+      this.goodList = [];
+      this.finished = false;
+      this.page = 1;
+      this.onload();
+    },
+    getGoodList() {
+      this.$axios({
+        url: LOCALURL + "/goods/getGoodsListByCategorySubID",
+        method: "post",
+        data: { categorySubId: this.categorySubId, page: this.page }
+      })
+        .then(res => {
+          console.log(res);
+          if (res.data.code == 200 && res.data.message.length) {
+            this.page++;
+            this.goodList = this.goodList.concat(res.data.message);
+          } else {
+            this.finished = true;
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     // 下拉刷新方法
     onRefresh() {
       setTimeout(() => {
         this.isRefresh = false;
         this.finished = false;
-        this.list = [];
+        this.goodList = [];
+        this.page = 1;
         this.onload();
       }, 500);
     },
     // 上拉加载方法
     onload() {
       setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
-        }
-        this.loading = false;
-        if (this.list.length >= 40) {
-          this.finished = true;
-        }
-      }, 500);
+        this.categorySubId = this.categorySubId
+          ? this.categorySubId
+          : this.categorySub[0].ID;
+        this.getGoodList();
+      }, 1000);
     },
     clickCategory(index, categoryId) {
       this.categoryIndex = index;
+      this.page = 1;
+      this.finished = false;
+      this.goodList = [];
       this.getCategorySubByCategoryId(categoryId);
     },
     // 根据大类ID读取小类类别列表
@@ -101,6 +140,8 @@ export default {
             this.categorySub = response.data.message;
             console.log(this.categorySub);
             this.active = 0;
+            this.categorySubId = this.categorySub[0].ID;
+            this.onload();
           } else {
             this.$toast("服务器错误，数据取得失败");
           }
@@ -153,5 +194,24 @@ export default {
 }
 #list-div {
   overflow: scroll;
+}
+.list-item {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8rem;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #fff;
+  padding: 5px;
+}
+#list-div {
+  overflow: scroll;
+}
+.list-item-img {
+  flex: 8;
+}
+.list-item-text {
+  flex: 16;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 </style>
