@@ -155,7 +155,7 @@ export default {
 }
 .type-bar {
   background-color: #ffffff;
-  margin: 0.3rem 0.3rem 0.3rem;
+  margin: 0 0.3rem 0.3rem 0.3rem;
   border-radius: 0.3rem;
   font-size: 14px;
   display: flex;
@@ -192,5 +192,10 @@ export default {
   font-size: 14px;
   height: 1.8rem;
   line-height: 1.8rem;
+}
+.hot-goods {
+  height: 130rem;
+  overflow: hidden;
+  background-color: #fff;
 }
 </style>

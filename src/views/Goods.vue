@@ -43,17 +43,13 @@ export default {
     }
   },
   created() {
-    this.goodsId = this.$route.query.goodsId
-      ? this.$route.query.goodsId
-      : this.$route.params.goodsId;
+    this.goodsId = this.$route.query.goodsId ? this.$route.query.goodsId : this.$route.params.goodsId;
     this.getInfo();
   },
   methods: {
     addGoodsToCart() {
       // 取出本地购物车中的商品
-      let cartInfo = localStorage.cartInfo
-        ? JSON.parse(localStorage.cartInfo)
-        : [];
+      let cartInfo = localStorage.cartInfo ? JSON.parse(localStorage.cartInfo) : [];
       let isHaveGoods = cartInfo.find(cart => cart.goodsId == this.goodsId);
       console.log(isHaveGoods);
       if (!isHaveGoods) {

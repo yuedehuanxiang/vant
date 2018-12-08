@@ -82,8 +82,8 @@ export default {
   },
   mounted() {
     let winHeight = document.documentElement.clientHeight;
-    document.getElementById("leftNav").style.height = winHeight - 46 + "px";
-    document.getElementById("list-div").style.height = winHeight - 90 + "px";
+    document.getElementById("leftNav").style.height = winHeight - 46 - 50 + "px";
+    document.getElementById("list-div").style.height = winHeight - 90 - 50 + "px";
   },
   methods: {
     goGoodsInfo(id) {
@@ -130,9 +130,7 @@ export default {
     // 上拉加载方法
     onload() {
       setTimeout(() => {
-        this.categorySubId = this.categorySubId
-          ? this.categorySubId
-          : this.categorySub[0].ID;
+        this.categorySubId = this.categorySubId ? this.categorySubId : this.categorySub[0].ID;
         this.getGoodList();
       }, 1000);
     },

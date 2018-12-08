@@ -6,6 +6,7 @@ import Login from "./views/Login.vue";
 import Goods from "./views/Goods.vue";
 import CategoryList from "./views/CategoryList.vue";
 import Cart from "./views/Cart.vue";
+import Main from "./views/Main.vue";
 
 Vue.use(Router);
 
@@ -14,10 +15,28 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
-      name: "Index",
-      component: Index
+      path: "/main",
+      name: "Main",
+      component: Main,
+      children: [
+        {
+          path: "/",
+          name: "Index",
+          component: Index
+        },
+        {
+          path: "/categoryList",
+          name: "CategoryList",
+          component: CategoryList
+        },
+        {
+          path: "/cart",
+          name: "Cart",
+          component: Cart
+        }
+      ]
     },
+
     {
       path: "/register",
       name: "Register",
@@ -32,17 +51,8 @@ export default new Router({
       path: "/goods",
       name: "Goods",
       component: Goods
-    },
-    {
-      path: "/categoryList",
-      name: "CategoryList",
-      component: CategoryList
-    },
-    {
-      path: "/cart",
-      name: "Cart",
-      component: Cart
     }
+
     // {
     //   path: "/about",
     //   name: "about",
