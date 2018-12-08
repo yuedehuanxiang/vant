@@ -18,9 +18,15 @@
             <van-stepper v-model="item.count"></van-stepper>
           </div>
         </div>
-        <div class="goods-price">¥{{item.price | moneyFilter}}</div>
+        <div class="goods-price">
+          <div>¥{{item.price | moneyFilter}}</div>
+          <div>x{{item.count}}</div>
+          <div class="allPrice">¥{{item.price*item.count | moneyFilter}}</div>
+        </div>
       </div>
     </div>
+    <!-- 显示总金额 -->
+    <div class="totalMoney">商品总价:¥{{totalMoney | moneyFilter}}</div>
   </div>
 </template>
 
@@ -32,6 +38,16 @@ export default {
       cartInfo: [], //购物车内的商品
       isEmpty: false //购物车是否为空，不为空则显示true，为空显示false
     };
+  },
+  computed: {
+    totalMoney() {
+      let allMoney = 0;
+      this.cartInfo.forEach(item => {
+        allMoney += item.price * item.count;
+      });
+      localStorage.cartInfo = JSON.stringify(this.cartInfo);
+      return allMoney;
+    }
   },
   filters: {
     moneyFilter(money) {
@@ -90,5 +106,14 @@ export default {
 }
 .price {
   flex: 4;
+}
+.allPrice {
+  color: red;
+}
+.totalMoney {
+  text-align: right;
+  background-color: #fff;
+  border-bottom: #e4e7ed;
+  padding: 5px;
 }
 </style>
