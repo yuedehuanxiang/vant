@@ -30,13 +30,18 @@
           <div id="list-div">
             <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
               <van-list v-model="loading" :finished="finished" @load="onload">
-                <div class="list-item" v-for="(item,index) in goodList" :key="index">
+                <div
+                  class="list-item"
+                  @click="goGoodsInfo(item.ID)"
+                  v-for="(item,index) in goodList"
+                  :key="index"
+                >
                   <div class="list-item-img">
-                    <img :src="item.IMAGE1" width="100%" alt>
+                    <img :src="item.IMAGE1" :onerror="errorImg" width="100%" alt>
                   </div>
                   <div class="list-item-text">
                     <div>{{item.NAME}}</div>
-                    <div>{{item.ORI_PRICE}}</div>
+                    <div>¥{{item.ORI_PRICE | moneyFilter}}</div>
                   </div>
                 </div>
               </van-list>
@@ -50,6 +55,7 @@
 
 <script>
 import { LOCALURL } from "../serviceAPI.config.js";
+import { toMoney } from "../filter/moneyFilter.js";
 export default {
   data() {
     return {
@@ -62,8 +68,14 @@ export default {
       page: 1, // 商品列表的页数
       goodList: [], // 商品列表信息
       categorySubId: "", // 商品子类ID
-      isRefresh: false //下拉刷新
+      isRefresh: false, //下拉刷新
+      errorImg: 'this.src="' + require("@/assets/images/error.png") + '"'
     };
+  },
+  filters: {
+    moneyFilter(money) {
+      return toMoney(money);
+    }
   },
   created() {
     this.getCategory();
@@ -74,6 +86,9 @@ export default {
     document.getElementById("list-div").style.height = winHeight - 90 + "px";
   },
   methods: {
+    goGoodsInfo(id) {
+      this.$router.push({ name: "Goods", params: { goodsId: id } });
+    },
     onClickCategorySub(index) {
       this.categorySubId = this.categorySub[index].ID;
       console.log("categorySubId" + this.categorySubId);
@@ -183,17 +198,8 @@ export default {
   font-size: 0.8rem;
   text-align: center;
 }
-.categoryActive {
+.categoryActice {
   background-color: #fff;
-}
-.list-item {
-  text-align: center;
-  line-height: 80px;
-  border-bottom: 1px solid #f0f0f0;
-  background-color: #fff;
-}
-#list-div {
-  overflow: scroll;
 }
 .list-item {
   display: flex;
